@@ -25,12 +25,12 @@ namespace Encrypter
 
         private void encryptButton_Click(object sender, EventArgs e)
         {
-            EncryptFile(@"C:\Users\ElephantPC\Desktop\TestFile.txt", @"C:\Users\ElephantPC\Desktop\EncryptedTestFile.txt", sSecretKey);
+            EncryptFile(@"C:\Users\Public\Documents\TestFile.txt", @"C:\Users\Public\Documents\EncryptedTestFile.txt", sSecretKey);
         }
 
         private void decryptButton_Click(object sender, EventArgs e)
         {
-            DecryptFile(@"C:\Users\ElephantPC\Desktop\EncryptedTestFile.txt", @"C:\Users\ElephantPC\Desktop\DencryptedTestFile.txt", sSecretKey);
+            DecryptFile(@"C:\Users\Public\Documents\EncryptedTestFile.txt", @"C:\Users\Public\Documents\DecryptedTestFile.txt", sSecretKey);
         }
 
         private void browseButton_Click(object sender, EventArgs e)
@@ -57,26 +57,32 @@ namespace Encrypter
             {
                 FileStream fsInput = new FileStream(sInputFilename, FileMode.Open, FileAccess.Read);
                 FileStream fsEncrypted = new FileStream(sOutputFilename, FileMode.Create, FileAccess.Write);
-
                 DESCryptoServiceProvider DES = new DESCryptoServiceProvider();
-                DES.Key = ASCIIEncoding.ASCII.GetBytes(sKey);
-                DES.IV = ASCIIEncoding.ASCII.GetBytes(sKey);
+                try
+                {
+                    DES.Key = ASCIIEncoding.ASCII.GetBytes(sKey);
+                    DES.IV = ASCIIEncoding.ASCII.GetBytes(sKey);
+                }
+                catch (ArgumentNullException ne)
+                {
+                    MessageBox.Show("No password set.");
+                }
 
-                ICryptoTransform desencrypt = DES.CreateEncryptor();
-                CryptoStream cryptostream = new CryptoStream(fsEncrypted, desencrypt, CryptoStreamMode.Write);
-                byte[] bytearrayinput = new byte[fsInput.Length - 1];
-                fsInput.Read(bytearrayinput, 0, bytearrayinput.Length);
-                cryptostream.Write(bytearrayinput, 0, bytearrayinput.Length);
-                cryptostream.Close();
-                fsInput.Close();
-                fsEncrypted.Close();
+                    ICryptoTransform desencrypt = DES.CreateEncryptor();
+                    CryptoStream cryptostream = new CryptoStream(fsEncrypted, desencrypt, CryptoStreamMode.Write);
+                    byte[] bytearrayinput = new byte[fsInput.Length - 1];
+                    fsInput.Read(bytearrayinput, 0, bytearrayinput.Length);
+                    cryptostream.Write(bytearrayinput, 0, bytearrayinput.Length);
+                    cryptostream.Close();
+                    fsInput.Close();
+                    fsEncrypted.Close();
+                
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
-                MessageBox.Show("Error, no password set.");
+                MessageBox.Show("Error, file to encrypt not found.");
             }
-            
-
+                
         }
 
         private void DecryptFile(string sInputFilename, string sOutputFilename, string sKey)
