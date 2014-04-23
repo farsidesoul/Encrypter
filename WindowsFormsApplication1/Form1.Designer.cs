@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApplication1
+﻿namespace Encrypter
 {
     partial class Form1
     {

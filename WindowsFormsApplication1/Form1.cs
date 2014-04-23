@@ -10,7 +10,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.IO;
 
-namespace WindowsFormsApplication1
+namespace Encrypter
 {
     public partial class Form1 : Form
     {
