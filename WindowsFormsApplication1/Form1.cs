@@ -30,8 +30,10 @@ namespace Encrypter
         {
             sSecretKey = GenerateKey();
             SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
+            whereToSaveFileDialog.Title = "Choose location to save Encrypted file:";
             whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
             whereToSaveFileDialog.RestoreDirectory = true;
+            whereToSaveFileDialog.FileName = "Encrypted File.txt";
 
             if(whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -53,7 +55,9 @@ namespace Encrypter
                 fileToDecryptLocation = fileToDecrypt.FileName.ToString();
             }
             SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
+            whereToSaveFileDialog.Title = "Choose location to save decrypted file:";
             whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
+            whereToSaveFileDialog.FileName = "Decrypted File.txt";
             whereToSaveFileDialog.RestoreDirectory = true;
 
             if (whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
