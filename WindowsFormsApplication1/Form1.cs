@@ -79,6 +79,10 @@ namespace Encrypter
 
                 DecryptFile(fileToDecryptLocation, whereToSave, sSecretKey);
             }
+            else
+            {
+                MessageBox.Show("Passphrase cannot be blank.");
+            }
             
         }
 
