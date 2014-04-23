@@ -16,6 +16,9 @@ namespace Encrypter
     {
         string sSecretKey;
         string password;
+        string fileToEncrypt;
+        string whereToSave;
+        string fileToDecryptLocation;
 
         public Form1()
         {
@@ -25,17 +28,59 @@ namespace Encrypter
 
         private void encryptButton_Click(object sender, EventArgs e)
         {
-            EncryptFile(@"C:\Users\Public\Documents\TestFile.txt", @"C:\Users\Public\Documents\EncryptedTestFile.txt", sSecretKey);
+            sSecretKey = GenerateKey();
+            SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
+            whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
+            whereToSaveFileDialog.RestoreDirectory = true;
+
+            if(whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                whereToSave = whereToSaveFileDialog.FileName.ToString();
+            }
+            EncryptFile(fileToEncrypt, whereToSave, sSecretKey);
         }
 
         private void decryptButton_Click(object sender, EventArgs e)
         {
-            DecryptFile(@"C:\Users\Public\Documents\EncryptedTestFile.txt", @"C:\Users\Public\Documents\DecryptedTestFile.txt", sSecretKey);
+            sSecretKey = GenerateKey();
+            OpenFileDialog fileToDecrypt = new OpenFileDialog();
+            fileToDecrypt.Title = "Open .txt File";
+            fileToDecrypt.Filter = "txt Files|*.txt";
+            fileToDecrypt.InitialDirectory = "@C:\\";
+
+            if (fileToDecrypt.ShowDialog() == DialogResult.OK)
+            {
+                fileToDecryptLocation = fileToDecrypt.FileName.ToString();
+            }
+            SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
+            whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
+            whereToSaveFileDialog.RestoreDirectory = true;
+
+            if (whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                whereToSave = whereToSaveFileDialog.FileName.ToString();
+            }
+
+            DecryptFile(fileToDecryptLocation, whereToSave, sSecretKey);
+        }
+
+        private void passPhraseSelectButton_Click(object sender, EventArgs e)
+        {
+            
         }
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            sSecretKey = GenerateKey();
+            OpenFileDialog fDialog = new OpenFileDialog();
+            fDialog.Title = "Open .txt File";
+            fDialog.Filter = "TXT Files|*.txt";
+            fDialog.InitialDirectory = "@C:\\";
+
+            if (fDialog.ShowDialog() == DialogResult.OK)
+            {
+                fileToEncrypt = fDialog.FileName.ToString();
+                fileLocation.Text = fileToEncrypt;
+            }
         }
 
         string GenerateKey()
