@@ -29,43 +29,57 @@ namespace Encrypter
         private void encryptButton_Click(object sender, EventArgs e)
         {
             sSecretKey = GenerateKey();
-            SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
-            whereToSaveFileDialog.Title = "Choose location to save Encrypted file:";
-            whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
-            whereToSaveFileDialog.RestoreDirectory = true;
-            whereToSaveFileDialog.FileName = "Encrypted File.txt";
-
-            if(whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
+            // Checks to ensure there is a passphrase to use to encrypt
+            if (password.Length > 0)
             {
-                whereToSave = whereToSaveFileDialog.FileName.ToString();
+                SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
+                whereToSaveFileDialog.Title = "Choose location to save Encrypted file:";
+                whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
+                whereToSaveFileDialog.RestoreDirectory = true;
+                whereToSaveFileDialog.FileName = "Encrypted File.txt";
+
+                if (whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    whereToSave = whereToSaveFileDialog.FileName.ToString();
+                }
+                EncryptFile(fileToEncrypt, whereToSave, sSecretKey); 
             }
-            EncryptFile(fileToEncrypt, whereToSave, sSecretKey);
+            else
+            {
+                MessageBox.Show("Passphrase cannot be blank.");
+            }
+            
         }
 
         private void decryptButton_Click(object sender, EventArgs e)
         {
             sSecretKey = GenerateKey();
-            OpenFileDialog fileToDecrypt = new OpenFileDialog();
-            fileToDecrypt.Title = "Open .txt File";
-            fileToDecrypt.Filter = "txt Files|*.txt";
-            fileToDecrypt.InitialDirectory = "@C:\\";
-
-            if (fileToDecrypt.ShowDialog() == DialogResult.OK)
+            // Checks to ensure there is a passphrase to use to decrypt.
+            if (password.Length > 0)
             {
-                fileToDecryptLocation = fileToDecrypt.FileName.ToString();
-            }
-            SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
-            whereToSaveFileDialog.Title = "Choose location to save decrypted file:";
-            whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
-            whereToSaveFileDialog.FileName = "Decrypted File.txt";
-            whereToSaveFileDialog.RestoreDirectory = true;
+                OpenFileDialog fileToDecrypt = new OpenFileDialog();
+                fileToDecrypt.Title = "Open .txt File";
+                fileToDecrypt.Filter = "txt Files|*.txt";
+                fileToDecrypt.InitialDirectory = "@C:\\";
 
-            if (whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                whereToSave = whereToSaveFileDialog.FileName.ToString();
-            }
+                if (fileToDecrypt.ShowDialog() == DialogResult.OK)
+                {
+                    fileToDecryptLocation = fileToDecrypt.FileName.ToString();
+                }
+                SaveFileDialog whereToSaveFileDialog = new SaveFileDialog();
+                whereToSaveFileDialog.Title = "Choose location to save decrypted file:";
+                whereToSaveFileDialog.Filter = "txt files (*.txt)|*.txt";
+                whereToSaveFileDialog.FileName = "Decrypted File.txt";
+                whereToSaveFileDialog.RestoreDirectory = true;
 
-            DecryptFile(fileToDecryptLocation, whereToSave, sSecretKey);
+                if (whereToSaveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    whereToSave = whereToSaveFileDialog.FileName.ToString();
+                }
+
+                DecryptFile(fileToDecryptLocation, whereToSave, sSecretKey);
+            }
+            
         }
 
         private void passPhraseSelectButton_Click(object sender, EventArgs e)
@@ -107,31 +121,30 @@ namespace Encrypter
                 FileStream fsInput = new FileStream(sInputFilename, FileMode.Open, FileAccess.Read);
                 FileStream fsEncrypted = new FileStream(sOutputFilename, FileMode.Create, FileAccess.Write);
                 DESCryptoServiceProvider DES = new DESCryptoServiceProvider();
-                try
-                {
-                    DES.Key = ASCIIEncoding.ASCII.GetBytes(sKey);
-                    DES.IV = ASCIIEncoding.ASCII.GetBytes(sKey);
-                }
-                catch (ArgumentNullException ne)
-                {
-                    MessageBox.Show("No password set.");
-                }
-
-                    ICryptoTransform desencrypt = DES.CreateEncryptor();
-                    CryptoStream cryptostream = new CryptoStream(fsEncrypted, desencrypt, CryptoStreamMode.Write);
-                    byte[] bytearrayinput = new byte[fsInput.Length - 1];
-                    fsInput.Read(bytearrayinput, 0, bytearrayinput.Length);
-                    cryptostream.Write(bytearrayinput, 0, bytearrayinput.Length);
-                    cryptostream.Close();
-                    fsInput.Close();
-                    fsEncrypted.Close();
+                
+                DES.Key = ASCIIEncoding.ASCII.GetBytes(sKey);
+                DES.IV = ASCIIEncoding.ASCII.GetBytes(sKey);
+                ICryptoTransform desencrypt = DES.CreateEncryptor();
+                CryptoStream cryptostream = new CryptoStream(fsEncrypted, desencrypt, CryptoStreamMode.Write);
+                byte[] bytearrayinput = new byte[fsInput.Length - 1];
+                fsInput.Read(bytearrayinput, 0, bytearrayinput.Length);
+                cryptostream.Write(bytearrayinput, 0, bytearrayinput.Length);
+                cryptostream.Close();
+                fsInput.Close();
+                fsEncrypted.Close();
                 
             }
             catch (FileNotFoundException ex)
             {
                 MessageBox.Show("Error, file to encrypt not found.");
             }
-                
+            catch (ArgumentNullException ne)
+            {
+                if (fsInput == null)
+                {
+
+                }
+            }
         }
 
         private void DecryptFile(string sInputFilename, string sOutputFilename, string sKey)
@@ -165,5 +178,7 @@ namespace Encrypter
             fsDecrypted.Flush();
             fsDecrypted.Close();
         }
+
+        public object fsInput { get; set; }
     }
 }
