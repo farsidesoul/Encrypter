@@ -112,7 +112,6 @@ namespace Encrypter
             Console.WriteLine(key.Length * 8);
             string str = System.Text.Encoding.ASCII.GetString(key);
             return str;
-            
         }
 
         private void EncryptFile(string sInputFilename, string sOutputFilename, string sKey)
@@ -154,13 +153,12 @@ namespace Encrypter
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider
             {
-                // Set secret key for DES algorithm
+            // Set secret key for DES algorithm
             Key = Encoding.ASCII.GetBytes(sKey),
             // Set initialization vector.
             IV = Encoding.ASCII.GetBytes(sKey),
             };
             
-
             // Create a file stream to read the encrypted file back.
             FileStream fsread = new FileStream(sInputFilename, FileMode.Open, FileAccess.Read);
 
