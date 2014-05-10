@@ -1,6 +1,6 @@
 ﻿namespace Encrypter
 {
-    partial class Form1
+    partial class EncryptorWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
             this.secretKeyBox = new System.Windows.Forms.TextBox();
             this.browseButton = new System.Windows.Forms.Button();
             this.fileLocation = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.passkeyLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // encryptButton
@@ -82,27 +82,27 @@
             this.fileLocation.Text = "Select File Loction...";
             this.fileLocation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label1
+            // passkeyLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 72);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Enter a Passkey: ";
+            this.passkeyLabel.AutoSize = true;
+            this.passkeyLabel.Location = new System.Drawing.Point(44, 72);
+            this.passkeyLabel.Name = "passkeyLabel";
+            this.passkeyLabel.Size = new System.Drawing.Size(90, 13);
+            this.passkeyLabel.TabIndex = 7;
+            this.passkeyLabel.Text = "Enter a Passkey: ";
             // 
-            // Form1
+            // EncryptorWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(281, 161);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.passkeyLabel);
             this.Controls.Add(this.fileLocation);
             this.Controls.Add(this.browseButton);
             this.Controls.Add(this.secretKeyBox);
             this.Controls.Add(this.decryptButton);
             this.Controls.Add(this.encryptButton);
-            this.Name = "Form1";
+            this.Name = "EncryptorWindow";
             this.Text = "Encrypter/Decrypter";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -116,7 +116,7 @@
         private System.Windows.Forms.TextBox secretKeyBox;
         private System.Windows.Forms.Button browseButton;
         private System.Windows.Forms.Label fileLocation;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label passkeyLabel;
     }
 }
 
